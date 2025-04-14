@@ -26,6 +26,9 @@ SECRET_KEY = 'django-insecure--+%--p&3s!76%8n$ikpykf8vp*!dketznixqpzo+e3!c31@4_o
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+FRONTEND_URL = 'http://localhost:5173'
+DEFAULT_FROM_EMAIL = 'noreply@mymovies.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = 'users.User'
 
