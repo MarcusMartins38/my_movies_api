@@ -17,3 +17,6 @@ ENV/
 # Arquivos de mídia/estáticos locais
 /media
 /static
+
+# PyCharm
+.idea/
