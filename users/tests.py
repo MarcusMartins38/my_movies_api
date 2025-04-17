@@ -54,7 +54,7 @@ class UserSerializerTest(TestCase):
         }
         serializer = UserSerializer(instance=self.user, data=data, partial=True, context={'request': self.request})
         self.assertFalse(serializer.is_valid())
-        self.assertIn('new_password', serializer.errors)
+        self.assertIn('confirm_new_password', serializer.errors)
 
     def test_incomplete_password_fields(self):
         data = {

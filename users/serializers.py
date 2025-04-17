@@ -19,24 +19,24 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        if 'new_password' in attrs:
-            if 'current_password' not in attrs:
-                raise serializers.ValidationError(
-                    {"current_password": "Current password is required to set a new password."})
+        password_fields = {'new_password', 'current_password', 'confirm_new_password'}
+        provided_password_fields = {field for field in password_fields if field in attrs}
 
-            user = self.context['request'].user
-            if not user.check_password(attrs['current_password']):
-                raise serializers.ValidationError({"current_password": "Current password is incorrect."})
+        if not provided_password_fields:
+            return attrs
 
-            if 'confirm_new_password' not in attrs:
-                raise serializers.ValidationError({"confirm_new_password": "Password confirmation is required."})
+        if len(provided_password_fields) < len(password_fields):
+            missing_fields = password_fields - provided_password_fields
+            errors = {field: f"This field is required to change password." for field in missing_fields}
+            raise serializers.ValidationError(errors)
 
-            if attrs['new_password'] != attrs['confirm_new_password']:
-                raise serializers.ValidationError({"new_password": "New password and confirmation do not match."})
+        user = self.context['request'].user
+        if not user.check_password(attrs['current_password']):
+            raise serializers.ValidationError({"current_password": "Current password is incorrect."})
 
-        elif any(field in attrs for field in ['current_password', 'confirm_new_password']):
+        if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError(
-                {"new_password": "All password fields must be provided to update password."})
+                {"confirm_new_password": "Password confirmation does not match new password."})
 
         return attrs
 
