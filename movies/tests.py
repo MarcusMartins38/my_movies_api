@@ -47,8 +47,7 @@ class MovieModelTest(TestCase):
         data['rate'] = -1
 
         with self.assertRaises(IntegrityError):
-            movie = Movie.objects.create(**data)
-            movie.full_clean()
+            Movie.objects.create(**data)
 
     def test_created_and_updated_timestamps(self):
         movie = Movie.objects.create(**self.movie_data)
