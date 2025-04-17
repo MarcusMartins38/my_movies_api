@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.conf import settings
 
@@ -8,7 +9,13 @@ class Movie(models.Model):
         related_name='movies'
     )
     title = models.CharField(max_length=255)
-    rate = models.PositiveSmallIntegerField()  # e.g. 1 to 10
+    rate = models.PositiveSmallIntegerField(
+        default=1,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10)
+        ]
+    )  # e.g. 1 to 10
     image_url = models.URLField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
